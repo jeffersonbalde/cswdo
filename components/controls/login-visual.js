@@ -517,7 +517,7 @@ class LoginPage extends HTMLElement {
 
           <div class="login-container">
             <div class="login-header">
-              <h4>LOG IN</h4>
+              <h4>I LOVE JEEFFFF</h4>
               <p>Log in to your account</p>
             </div>
 
