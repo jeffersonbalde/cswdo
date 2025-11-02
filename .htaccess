@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Serve existing files and directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route API requests to PHP files
+RewriteRule ^api/(.*)$ php_folder/$1 [L,QSA]
+
+# Route all other requests to index.html for SPA routing
+RewriteRule ^(?!php_folder/).*$ index.html [L]

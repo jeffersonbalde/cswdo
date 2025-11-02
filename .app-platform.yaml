@@ -1,0 +1,20 @@
+name: cswdo-system
+
+services:
+- name: web
+  source_dir: /
+  environment_slug: php
+  run_command: apache2-foreground
+  http_port: 8080
+  
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: amirasistosomohammad/CSWDOWebMgtSystem
+
+  instance_count: 1
+  instance_size_slug: basic-xxs
+
+routes:
+- path: /
+  source_path: /

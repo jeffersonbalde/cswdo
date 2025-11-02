@@ -1,0 +1,33 @@
+name: cswdo-management-system
+services:
+- name: web
+  source_dir: .
+  github:
+    repo: amirasistosomohammad/CSWDOWebMgtSystem
+    branch: main
+  run_command: apache2-foreground
+  environment_slug: php
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: basic-xs
+  
+  envs:
+  - key: APP_ENV
+    value: production
+  - key: DB_HOST
+    value: ${db.HOST}
+  - key: DB_USER
+    value: ${db.USER}
+  - key: DB_PASSWORD
+    value: ${db.PASSWORD}
+  - key: DB_NAME
+    value: ${db.DATABASE}
+  - key: DB_PORT
+    value: ${db.PORT}
+
+databases:
+- name: db
+  engine: MYSQL
+  version: "8"
+  size_slug: db-s-1vcpu-1gb
+  num_nodes: 1

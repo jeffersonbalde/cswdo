@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="TRiG3N" />
+    <meta
+      name="description"
+      content="The official Web-Application of City Social Welfare and Development Office Pagadian City"
+    />
+<title>CSWDO-Pagadian | LogIn</title>
+
+    <!-- bootstrap import -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+      crossorigin="anonymous"
+    />
+
+    <!-- imports of components -->
+    <script type="module" src="./components/register-components.js"></script>
+
+<style>
+  /* Basic layout styles - mobile-first approach */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header and footer positioning */
+  resident-header {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 100;
+  }
+
+  main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  resident-footer {
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 100;
+  }
+
+  /* Responsive layout adjustments */
+  @media (min-width: 768px) {
+    body {
+      overflow: hidden;
+    }
+
+    main {
+      overflow: hidden;
+    }
+  }
+</style> 
+<!-- for the picture not to be scrollable in desktop -->
+
+</head>
+<body>
+
+    <resident-header></resident-header>
+
+   <main>
+    <feedback-widget></feedback-widget>
+    <chat-widget></chat-widget>
+
+    <login-visual
+    header="Welcome Back"
+    subheader="The City Social Welfare and Development Office in Pagadian City is mandated to provide social protective and social development services to poor, vulnerable and disadvantaged individuals, families, groups and communities."
+    img="/imgs/home_bckgrnd.png"
+  ></login-visual>
+
+
+
+   </main>
+     
+    
+    <!-- <resident-footer></resident-footer> -->
+
+
+</body>
+</html>

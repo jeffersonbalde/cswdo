@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="TRiG3N" />
+    <meta
+      name="description"
+      content="The official Web-Application of City Social Welfare and Development Office Pagadian City"
+    />
+<title>CSWDO-Pagadian | Featured Stories</title>
+
+    <!-- bootstrap import -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+      crossorigin="anonymous"
+    />
+
+ <style>
+    /* Override Bootstrap default body margins/padding to ensure footer extends to bottom */
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    html {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Container layout modifications - occupies entire desktop view with 20px margins */
+    .container {
+      max-width: calc(100vw - 40px) !important;
+      margin: 0 20px !important;
+      padding: 0 !important;
+    }
+    
+    /* Section cards - plain white with no borders */
+    .section-card {
+      padding: 1.5rem;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      background-color: white;
+      margin-bottom: 1.5rem;
+      /* Space between sections on mobile */
+    }
+    @media (min-width: 768px) {
+      .section-card {
+        margin-bottom: 0;
+        /* Remove margin between sections on desktop */
+      }
+    }
+    
+    /* H1 headings styling - centered and capitalized */
+    .mt-5 h1 {
+      text-align: center;
+      text-transform: capitalize;
+    }
+    
+    /* Button styling - black text, orange background, black border */
+    .btn {
+      color: black !important;
+      background-color: orange !important;
+      border: 1px solid black !important;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 0 auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      min-width: 150px;
+    }
+    
+    /* Button hover/click effects - white text, white border, A8D5BA background */
+    .btn:hover,
+    .btn:focus,
+    .btn:active {
+      color: white !important;
+      background-color: #A8D5BA !important;
+      border: 1px solid white !important;
+    }
+    
+    /* Special styling for small buttons like Load More */
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+      min-width: 120px;
+    }
+
+  </style>
+
+ <!-- imports of components -->
+ <script type="module" src="./components/register-components.js"></script>
+</head>
+<body>
+    <resident-header></resident-header>
+
+<main>
+  <feedback-widget></feedback-widget>
+  <chat-widget> </chat-widget>
+  <visual-picture img="/imgs/home_bckgrnd.png"></visual-picture>
+
+  <div class="container">
+    <div class="row mt-4">
+      <!-- Advisory Section (Left on Desktop, Bottom on Mobile) - 4/12 columns (4/10 ratio) -->
+      <div class="col-12 col-md-4 order-md-last">
+        <div class="section-card">
+          <h2>Advisories</h2>
+          <div id="advisories-container">
+            <!-- Advisory cards will be loaded here -->
+            <div class="text-center">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading advisories...</span>
+              </div>
+            </div>
+          </div>
+          <button id="load-more-advisories" class="btn btn-outline-primary btn-sm mt-3" style="display: none;">
+            Load More
+          </button>
+        </div>
+      </div>
+
+      <!-- Featured Stories Section (Right on Desktop, Top on Mobile) - 8/12 columns (6/10 ratio) -->
+      <div class="col-12 col-md-8 order-md-first">
+        <div class="section-card">
+          <div class="mt-5">
+            <h1>Featured Stories</h1>
+            <div id="featured-stories-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+              <!-- Featured stories cards will be loaded here dynamically -->
+              <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading featured stories...</span>
+                </div>
+              </div>
+            </div>
+            <button id="load-more-featured-stories" class="btn btn-primary mt-3" style="display: none;">
+              Load More
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<resident-footer></resident-footer>
+
+  <!-- Bootstrap JS (optional, for certain components like dropdowns, modals) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  
+  <script>
+    // Advisory Loader Class - Same as in index.html
+    class AdvisoryLoader {
+      constructor() {
+        this.container = document.getElementById('advisories-container');
+        this.loadMoreBtn = document.getElementById('load-more-advisories');
+        this.currentPage = 0;
+        this.allAdvisories = [];
+        this.isMobile = window.innerWidth < 768;
+        this.init();
+      }
+
+      async init() {
+        await this.loadAdvisories();
+        this.setupLoadMore();
+        this.setupResizeListener();
+      }
+
+      getItemsPerPage() {
+        return this.isMobile ? 3 : 20;
+      }
+
+      setupResizeListener() {
+        window.addEventListener('resize', () => {
+          const wasMobile = this.isMobile;
+          this.isMobile = window.innerWidth < 768;
+          
+          // If viewport changed from mobile to desktop or vice versa, refresh display
+          if (wasMobile !== this.isMobile) {
+            this.currentPage = 0;
+            this.displayAdvisories();
+          }
+        });
+      }
+
+      async loadAdvisories() {
+        try {
+          const response = await fetch('./php_folder/manageAdvisories.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.advisories?.length > 0) {
+            // Sort by upload date (most recent first)
+            this.allAdvisories = data.advisories.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            this.displayAdvisories();
+          } else {
+            this.showMessage('No advisories available');
+          }
+        } catch (error) {
+          console.error('Error loading advisories:', error);
+          this.showMessage('Error loading advisories');
+        }
+      }
+
+      displayAdvisories() {
+        const itemsPerPage = this.getItemsPerPage();
+        const startIndex = this.currentPage * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const advisoriesToShow = this.allAdvisories.slice(startIndex, endIndex);
+
+        if (this.currentPage === 0) {
+          this.container.innerHTML = '';
+          
+          // Enable mobile scroll immediately on mobile view
+          if (this.isMobile) {
+            this.enableMobileScroll();
+          }
+        }
+
+        advisoriesToShow.forEach((advisory, index) => {
+          const card = document.createElement('advisory-card');
+          card.setAttribute('id', `advisory-${advisory.advisoryId}`);
+          card.setAttribute('title', advisory.advisoryTitle);
+          card.setAttribute('desc', advisory.advisoryDescription);
+          card.setAttribute('date', this.formatDate(advisory.uploadDate));
+          
+          this.container.appendChild(card);
+        });
+
+        // Show/hide Load More button based on viewport and remaining items
+        const hasMore = endIndex < this.allAdvisories.length;
+        this.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+      }
+
+      setupLoadMore() {
+        this.loadMoreBtn.onclick = () => {
+          this.currentPage++;
+          this.displayAdvisories();
+        };
+      }
+
+      enableMobileScroll() {
+        // Add max-height and overflow-y scroll to container on mobile
+        this.container.style.maxHeight = '400px';
+        this.container.style.overflowY = 'auto';
+        this.container.style.paddingRight = '8px'; // Add some padding for scrollbar
+        
+        // Add custom scrollbar styling
+        this.container.style.scrollbarWidth = 'thin';
+        this.container.style.scrollbarColor = '#6B3E3E #f1f1f1';
+        
+        // Webkit scrollbar styling for better mobile experience
+        const style = document.createElement('style');
+        style.textContent = `
+          #advisories-container::-webkit-scrollbar {
+            width: 6px;
+          }
+          #advisories-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+          }
+          #advisories-container::-webkit-scrollbar-thumb {
+            background: #6B3E3E;
+            border-radius: 3px;
+          }
+          #advisories-container::-webkit-scrollbar-thumb:hover {
+            background: #5a3333;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      formatDate(dateString) {
+        // Convert YYYY-MM-DD to a more readable format
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+
+      showMessage(text) {
+        this.container.innerHTML = `
+          <div class="text-center">
+            <div class="alert alert-info" role="alert">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Featured Stories Loader Class
+    class FeaturedStoriesLoader {
+      constructor() {
+        this.container = document.getElementById('featured-stories-container');
+        this.loadMoreBtn = document.getElementById('load-more-featured-stories');
+        this.currentPage = 0;
+        this.allFeaturedStories = [];
+        this.itemsPerPage = 6;
+        this.init();
+      }
+
+      async init() {
+        await this.loadFeaturedStories();
+        this.setupLoadMore();
+      }
+
+      async loadFeaturedStories() {
+        try {
+          const response = await fetch('./php_folder/manageFeaturedStories.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.featuredstories?.length > 0) {
+            // Sort by upload date (most recent first)
+            this.allFeaturedStories = data.featuredstories.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            this.displayFeaturedStories();
+          } else {
+            this.showMessage('No featured stories available');
+          }
+        } catch (error) {
+          console.error('Error loading featured stories:', error);
+          this.showMessage('Error loading featured stories');
+        }
+      }
+
+      displayFeaturedStories() {
+        const startIndex = this.currentPage * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        const featuredStoriesToShow = this.allFeaturedStories.slice(startIndex, endIndex);
+
+        if (this.currentPage === 0) {
+          this.container.innerHTML = '';
+        }
+
+        featuredStoriesToShow.forEach((story, index) => {
+          const col = document.createElement('div');
+          col.className = 'col';
+          
+          const card = document.createElement('feature-card');
+          card.setAttribute('id', `featured-${story.featuredstoriesId}`);
+          card.setAttribute('img', story.featuredstoriesPicPath || '/imgs/CSWDO.png');
+          card.setAttribute('title', story.featuredstoriesTitle);
+          card.setAttribute('desc', this.formatDate(story.uploadDate));
+          
+          col.appendChild(card);
+          this.container.appendChild(col);
+        });
+
+        // Show/hide Load More button based on remaining items
+        const hasMore = endIndex < this.allFeaturedStories.length;
+        this.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+      }
+
+      setupLoadMore() {
+        this.loadMoreBtn.onclick = () => {
+          this.currentPage++;
+          this.displayFeaturedStories();
+        };
+      }
+
+      formatDate(dateString) {
+        // Convert YYYY-MM-DD to a more readable format
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+
+      showMessage(text) {
+        this.container.innerHTML = `
+          <div class="col-12 text-center">
+            <div class="alert alert-info" role="alert">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      new AdvisoryLoader();
+      new FeaturedStoriesLoader();
+    });
+  </script>
+</body>
+</html>

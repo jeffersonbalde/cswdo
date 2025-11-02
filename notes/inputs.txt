@@ -1,0 +1,418 @@
+<div class="form-group">
+                                        <label for="addServiceDate" class="form-label">Upload Date</label>
+                                        <!-- Changed type to text and set to readonly for custom format -->
+                                        <input type="text" id="addServiceDate" name="serviceDate" class="form-control" readonly>
+                                    </div>
+
+
+
+
+class AddUser extends HTMLElement {
+  constructor() {
+    super()
+    this.attachShadow({ mode: "open" })
+    this.profileImageBlobUrl = null // To store the URL of the selected image
+  }
+
+  connectedCallback() {
+    this.render()
+    this.initializeElements()
+    this.initEventListeners()
+    this.openModal() // Automatically open the modal when the component is created
+  }
+
+  disconnectedCallback() {
+    // Clean up when modal is removed
+    document.body.style.overflow = ""
+    if (this.profileImageBlobUrl) {
+      URL.revokeObjectURL(this.profileImageBlobUrl) // Clean up blob URL
+    }
+  }
+
+  initializeElements() {
+    // Initialize DOM elements after render
+    this.modal = this.shadowRoot.getElementById("addUserModal")
+    this.form = this.shadowRoot.getElementById("addUserForm")
+    this.userIdInput = this.shadowRoot.getElementById("addUserId")
+    this.userTypeInput = this.shadowRoot.getElementById("addUserType")
+    this.departmentInput = this.shadowRoot.getElementById("addUserDepartment")
+    this.usernameInput = this.shadowRoot.getElementById("addUsername")
+    this.handlerNameInput = this.shadowRoot.getElementById("addHandlerName")
+    this.passwordInput = this.shadowRoot.getElementById("addPassword")
+    this.errorDiv = this.shadowRoot.getElementById("addUserError")
+    this.profileImageInput = this.shadowRoot.getElementById("profileImageInput")
+    this.profileImagePreview = this.shadowRoot.getElementById("profileImagePreview")
+    this.attachFileButton = this.shadowRoot.getElementById("attachFileBtn")
+  }
+
+  initEventListeners() {
+    // Close modal events
+    this.shadowRoot.getElementById("closeAddModal").addEventListener("click", () => {
+      this.closeModal()
+    })
+    this.shadowRoot.getElementById("cancelAddBtn").addEventListener("click", () => {
+      this.closeModal()
+    })
+    // Close on backdrop click
+    this.modal.addEventListener("click", (e) => {
+      if (e.target === this.modal) {
+        this.closeModal()
+      }
+    })
+    // Form submission
+    this.form.addEventListener("submit", (e) => {
+      e.preventDefault()
+      this.handleSubmit()
+    })
+    // ESC key to close
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.modal.classList.contains("show")) {
+        this.closeModal()
+      }
+    })
+    // Attach file button click
+    this.attachFileButton.addEventListener("click", () => {
+      this.profileImageInput.click()
+    })
+    // Handle file input change
+    this.profileImageInput.addEventListener("change", (event) => {
+      const file = event.target.files[0]
+      if (file) {
+        if (this.profileImageBlobUrl) {
+          URL.revokeObjectURL(this.profileImageBlobUrl) // Clean up previous blob URL
+        }
+        this.profileImageBlobUrl = URL.createObjectURL(file)
+        this.profileImagePreview.src = this.profileImageBlobUrl
+      }
+    })
+  }
+
+  openModal() {
+    this.modal.classList.add("show")
+    this.clearError()
+    document.body.style.overflow = "hidden"
+  }
+
+  closeModal() {
+    this.modal.classList.remove("show")
+    this.form.reset()
+    this.clearError()
+    document.body.style.overflow = ""
+    // Reset image preview
+    if (this.profileImageBlobUrl) {
+      URL.revokeObjectURL(this.profileImageBlobUrl)
+      this.profileImageBlobUrl = null
+    }
+    this.profileImagePreview.src = "/placeholder.svg?height=150&width=150" // Reset to default placeholder
+    this.remove() // Remove the modal from DOM
+  }
+
+  showError(message) {
+    this.errorDiv.textContent = message
+    this.errorDiv.classList.add("show")
+  }
+
+  clearError() {
+    this.errorDiv.textContent = ""
+    this.errorDiv.classList.remove("show")
+  }
+
+  handleSubmit() {
+    const formData = new FormData(this.form)
+    const data = Object.fromEntries(formData.entries())
+
+    // Add profile image file to data if selected
+    if (this.profileImageInput.files && this.profileImageInput.files[0]) {
+      data.profileImage = this.profileImageInput.files[0].name // Or the file object itself if needed
+    }
+
+    // Basic validation
+    if (!data.userId || !data.userType || !data.department || !data.username || !data.handlerName || !data.password) {
+      this.showError("Please fill in all required fields.")
+      return
+    }
+
+    // Process the form data
+    console.log("User Data:", data)
+    // Dispatch custom event to notify parent component
+    this.dispatchEvent(
+      new CustomEvent("user-saved", {
+        detail: { user: data },
+        bubbles: true,
+      }),
+    )
+    alert("User saved successfully!")
+    this.closeModal()
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+      <style>
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1055;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0,0,0,0.5);
+          align-items: center;
+          justify-content: center;
+        }
+        .modal.show {
+          display: flex;
+        }
+        .modal-dialog {
+          max-width: 950px;
+          width: 100%;
+          position: relative;
+        }
+        .modal-content {
+          background-color: white;
+          border: 2px solid #ea580c;
+          border-radius: 5px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          position: relative;
+          overflow: hidden;
+          width: 950px;
+        }
+        .modal-bg-logo {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: url('/imgs/CSWDO Pags Logo.png') no-repeat center center; /* Using provided logo */
+          background-size: 60%;
+          opacity: 0.08;
+          z-index: 1; /* Behind content */
+          pointer-events: none;
+        }
+        .modal-header,
+        .modal-body,
+        .modal-footer {
+          position: relative;
+          z-index: 10;
+          background-color: rgba(255, 255, 255, 0.95);
+        }
+        .modal-header {
+          padding: 1rem;
+          border-bottom: 1px solid #e5e7eb;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+        }
+        .modal-title {
+          margin: 0;
+          font-size: 1.125rem;
+          font-weight: bold;
+          text-align: center;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: #374151;
+          flex: 1;
+        }
+        .btn-close {
+          position: absolute;
+          top: 50%;
+          right: 1rem;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 2px;
+          z-index: 20;
+        }
+        .btn-close:hover {
+          background-color: #f3f4f6;
+        }
+        .modal-body {
+          padding: 1rem;
+          position: relative;
+          z-index: 10;
+        }
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 2fr; /* Adjust for image and form fields */
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+        .form-column {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        .form-group {
+          margin-bottom: 1rem;
+        }
+        .form-label {
+          display: block;
+          margin-bottom: 0.25rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: #374151;
+        }
+        .form-control {
+          width: 100%;
+          padding: 0.5rem;
+          border: 2px solid #ea580c;
+          border-radius: 2px;
+          font-size: 14px;
+          color: black;
+          position: relative;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .form-control:focus {
+          outline: none;
+          border-color: #c2410c;
+          box-shadow: 0 0 0 1px #c2410c;
+          background-color: white !important;
+        }
+        .form-control:read-only {
+          background-color: #f9fafb !important;
+          cursor: not-allowed;
+        }
+        .form-control.textarea {
+          resize: none;
+          font-family: inherit;
+          background-color: white !important;
+        }
+        input.form-control,
+        textarea.form-control,
+        select.form-control {
+          background-color: white !important;
+        }
+        input.form-control:focus,
+        textarea.form-control:focus,
+        select.form-control:focus {
+          background-color: white !important;
+        }
+        .modal-footer {
+          padding: 1rem;
+          display: flex;
+          gap: 0.75rem;
+          position: relative;
+          z-index: 10;
+        }
+        .btn {
+          flex: 1;
+          padding: 0.5rem 1rem;
+          border-radius: 2px;
+          font-weight: 500;
+          cursor: pointer;
+          border: none;
+          font-size: 0.875rem;
+        }
+        .btn-primary {
+          background-color: #ea580c;
+          color: white;
+        }
+        .btn-primary:hover {
+          background-color: #c2410c;
+        }
+        .btn-secondary {
+          background-color: transparent;
+          color: #374151;
+          border: 2px solid #9ca3af;
+        }
+        .btn-secondary:hover {
+          background-color: #f9fafb;
+        }
+        .alert {
+          padding: 0.75rem;
+          margin-bottom: 1rem;
+          border-radius: 2px;
+          display: none;
+        }
+        .alert-danger {
+          background-color: #fef2f2;
+          border: 1px solid #fecaca;
+          color: #dc2626;
+        }
+        .alert.show {
+          display: block;
+        }
+        .profile-image-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 1rem;
+          border: 2px solid #ea580c;
+          border-radius: 5px;
+          background-color: #fff;
+        }
+        .profile-image-container img {
+          width: 150px;
+          height: 150px;
+          object-fit: cover;
+          border-radius: 3px;
+          border: 1px solid #e5e7eb;
+        }
+      </style>
+      <div id="addUserModal" class="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-bg-logo"></div>
+            <div class="modal-header">
+              <h5 id="addOrdinancesTitle" class="modal-title">Add User</h5>
+              <button type="button" id="closeAddModal" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div id="addUserError" class="alert alert-danger"></div>
+              <form id="addUserForm">
+                <div class="form-grid">
+                //   <div class="profile-image-container">
+                //     <img id="profileImagePreview" src="/placeholder.svg?height=150&width=150" alt="Profile Image" />
+                //     <input type="file" id="profileImageInput" name="profileImage" accept="image/jpeg, image/png" style="display: none;" />
+                //     <button type="button" id="attachFileBtn" class="btn btn-primary">Attach File</button>
+                //   </div>
+                  <div class="form-column">
+                    <div class="form-group">
+                      <label for="addUserId" class="form-label">User ID</label>
+                      <input type="text" id="addUserId" name="userId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="addUserType" class="form-label">User Type</label>
+                      <input type="text" id="addUserType" name="userType" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="addUserDepartment" class="form-label">Department</label>
+                      <input type="text" id="addUserDepartment" name="department" class="form-control" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="addUsername" class="form-label">username</label>
+                  <input type="text" id="addUsername" name="username" class="form-control" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                  <label for="addHandlerName" class="form-label">Handler Name</label>
+                  <input type="text" id="addHandlerName" name="handlerName" class="form-control" placeholder="Enter handler name" required>
+                </div>
+                <div class="form-group">
+                  <label for="addPassword" class="form-label">Password</label>
+                  <input type="password" id="addPassword" name="password" class="form-control" placeholder="Enter password" required>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" id="saveAddBtn" class="btn btn-primary" form="addUserForm">Save User</button>
+              <button type="button" id="cancelAddBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  }
+}
+customElements.define("add-user", AddUser)

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="TRiG3N" />
+  <meta name="description"
+    content="The official Web-Application of City Social Welfare and Development Office Pagadian City" />
+  <title>CSWDO-Pagadian | Home</title>
+  <!-- bootstrap import -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
+  <!-- imports of components -->
+  <script type="module" src="./components/register-components.js"></script>
+  <style>
+    /* Override Bootstrap default body margins/padding to ensure footer extends to bottom */
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    html {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Container layout modifications */
+    .container {
+      max-width: calc(100vw - 40px) !important;
+      margin: 0 20px !important;
+      padding: 0 !important;
+    }
+    
+    /* Section cards - plain white with no borders */
+    .section-card {
+      padding: 1.5rem;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      background-color: white;
+      margin-bottom: 1.5rem;
+      /* Space between sections on mobile */
+    }
+    @media (min-width: 768px) {
+      .section-card {
+        margin-bottom: 0;
+        /* Remove margin between sections on desktop */
+      }
+    }
+    
+    /* H1 headings styling */
+    .mt-5 h1 {
+      text-align: center;
+      text-transform: capitalize;
+    }
+    
+    /* Button styling */
+    .btn {
+      color: black !important;
+      background-color: orange !important;
+      border: 1px solid black !important;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 0 auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      min-width: 150px;
+    }
+    
+    .btn:hover,
+    .btn:focus,
+    .btn:active {
+      color: white !important;
+      background-color: #A8D5BA !important;
+      border: 1px solid white !important;
+    }
+    
+    /* Special styling for small buttons like Load More */
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+      min-width: 120px;
+    }
+    /* REMOVED: .advisories and .contents custom CSS */
+    .placeholder-component {
+      border: 2px dashed #ccc;
+      padding: 1rem;
+      text-align: center;
+      color: #888;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    /* Services Carousel - Enhanced & Appealing */
+    .services-carousel-container {
+      position: relative;
+      width: 100%;
+      
+      overflow: hidden;
+      margin: 1rem 0;
+      padding-bottom: 50px;
+    }
+
+    .services-carousel {
+      display: flex;
+      gap: 1rem;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      padding: 10px 10px;
+      cursor: grab;
+    }
+
+    .services-carousel:active {
+      cursor: grabbing;
+    }
+
+    .service-card-wrapper {
+      flex: 0 0 260px; /* Slightly smaller for better mobile fit */
+      min-width: 260px;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid #90EE90;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #333;
+      z-index: 10;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .carousel-btn:hover {
+      background: #90EE90;
+      color: white;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 20px rgba(144, 238, 144, 0.3);
+    }
+
+    .carousel-btn-left { left: 0.5rem; }
+    .carousel-btn-right { right: 0.5rem; }
+
+    /* Mobile touch improvements */
+    @media (max-width: 767px) {
+      .services-carousel-container {
+        padding-bottom: 50px;
+      }
+      
+      .service-card-wrapper {
+        flex: 0 0 240px; /* Even smaller for mobile */
+        min-width: 240px;
+      }
+      
+      .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+      }
+      
+      .carousel-btn-left { left: 0.25rem; }
+      .carousel-btn-right { right: 0.25rem; }
+    }
+
+    /* Tablet styles */
+    @media (min-width: 768px) {
+      .services-carousel-container {
+        padding-bottom: 50px;
+      }
+      
+      .service-card-wrapper { 
+        flex: 0 0 300px; 
+        min-width: 300px; 
+      }
+      
+      .carousel-btn { 
+        width: 45px; 
+        height: 45px; 
+        font-size: 1.3rem;
+      }
+      
+      .carousel-btn-left { left: 1rem; }
+      .carousel-btn-right { right: 1rem; }
+    }
+
+    /* Desktop styles - proper spacing like in image */
+    @media (min-width: 992px) {
+      .services-carousel-container {
+        padding-bottom: 50px;
+        max-width: 1200px; /* Limit container width */
+        margin: 1rem auto; /* Center the container */
+      }
+      
+      .service-card-wrapper { 
+        flex: 0 0 280px; /* Smaller cards for better fit */
+        min-width: 280px; 
+        margin: 0 0.5rem; /* Add margin between cards */
+      }
+      
+      .carousel-btn { 
+        width: 45px; 
+        height: 45px; 
+        font-size: 1.3rem;
+      }
+      
+      .carousel-btn-left { left: 0.5rem; }
+      .carousel-btn-right { right: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <resident-header></resident-header>
+  </header>
+  <main>
+    <feedback-widget></feedback-widget>
+    <chat-widget></chat-widget>
+    <visual-picture img="/imgs/home_bckgrnd.png"></visual-picture>
+    <!-- New Section: Advisory and Display -->
+    <div class="container">
+      <div class="row mt-4">
+        <!-- Advisory Section (Left on Desktop, Bottom on Mobile) -->
+        <div class="col-12 col-md-4 order-md-last">
+          <div class="section-card">
+            <h2>Advisories</h2>
+            <div id="advisories-container">
+              <!-- Advisory cards will be loaded here -->
+              <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading advisories...</span>
+                </div>
+              </div>
+            </div>
+            <button id="load-more-advisories" class="btn btn-outline-primary btn-sm mt-3" style="display: none;">
+              Load More
+            </button>
+          </div>
+        </div>
+
+
+        <div class="col-12 col-md-8 order-md-first">
+          <div class="section-card">
+            <div class="mt-5">
+              <h1 id="services">Services Offered</h1>
+              <div class="services-carousel-container">
+                <div id="services-container" class="services-carousel">
+                  <!-- Service cards will be loaded here -->
+                </div>
+                <button class="carousel-btn carousel-btn-left" id="prevBtn">‹</button>
+                <button class="carousel-btn carousel-btn-right" id="nextBtn">›</button>
+              </div>
+              <button class="btn btn-primary mt-3"><a href="services.html">Learn More</a></button>
+            </div>
+            <div class="mt-5">
+              <h1 id="ordinances">Ordinances</h1>
+              <div id="ordinances-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                <!-- Ordinance cards will be loaded here dynamically -->
+                <div class="col-12 text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading ordinances...</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary mt-3">Learn More</button>
+            </div>
+            <div class="mt-5">
+              <h1 id="news-updates">News and Updates</h1>
+              <div id="news-updates-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <!-- News update cards will be loaded here dynamically -->
+                <div class="col-12 text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading news updates...</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary mt-3">Learn More</button>
+            </div>
+            <div class="mt-5">
+              <h1>Accomplishment Reports</h1>
+              <!-- <accomplishment-dept></accomplishment-dept> -->
+              <button class="btn btn-primary mt-3">Learn More</button>
+            </div>
+            <div class="mt-5">
+              <h1>Featured Stories</h1>
+              <div id="featured-stories-container" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <!-- Featured stories cards will be loaded here dynamically -->
+                <div class="col-12 text-center">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading featured stories...</span>
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-primary mt-3">Learn More</button>
+            </div>
+            <div class="mt-5">
+              <h1>About Us</h1>
+              <!-- <service-card id="svc-1" img="/imgs/program1.jpg" title="Feeding Program"
+                desc="Helping nourish children in need.">
+              </service-card> -->
+              <button class="btn btn-primary mt-3">Learn More</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+
+<resident-footer></resident-footer>
+
+  <!-- Bootstrap JS (optional, for certain components like dropdowns, modals) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  
+  <script>
+    // Service Carousel - Enhanced with Touch Support
+    class ServiceCarousel {
+      constructor() {
+        this.carousel = document.getElementById('services-container');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+        this.currentIndex = 0;
+        this.totalCards = 0;
+        this.isDragging = false;
+        this.startX = 0;
+        this.currentX = 0;
+        this.initialTransform = 0;
+        
+        this.init();
+      }
+
+      async init() {
+        await this.loadServices();
+        this.setupCarousel();
+        this.setupTouchEvents();
+      }
+
+      async loadServices() {
+        try {
+          const response = await fetch('./php_folder/manageService.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.services?.length > 0) {
+            this.displayServices(data.services.slice(0, 8));
+          } else {
+            this.showMessage('No services available');
+          }
+        } catch (error) {
+          this.showMessage('Error loading services');
+        }
+      }
+
+      displayServices(services) {
+        this.carousel.innerHTML = '';
+        
+        // Create infinite loop by duplicating services
+        const servicesToShow = [...services, ...services, ...services];
+        
+        servicesToShow.forEach((service, index) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'service-card-wrapper';
+          
+          const card = document.createElement('service-card');
+          card.setAttribute('id', `service-${service.serviceId}-${index}`);
+          card.setAttribute('img', service.servicePicPath || '/imgs/sample1.png');
+          card.setAttribute('title', service.serviceTitle);
+          card.setAttribute('department', service.serviceDepartment);
+          
+          wrapper.appendChild(card);
+          this.carousel.appendChild(wrapper);
+        });
+
+        this.totalCards = services.length;
+        this.allCards = servicesToShow.length;
+        
+        // Start at the middle set (second set of services)
+        this.currentIndex = this.totalCards;
+        this.updatePosition();
+      }
+
+      setupCarousel() {
+        this.prevBtn.onclick = () => this.previous();
+        this.nextBtn.onclick = () => this.next();
+        this.updateButtons();
+      }
+
+      setupTouchEvents() {
+        // Mouse events for desktop
+        this.carousel.addEventListener('mousedown', this.handleStart.bind(this));
+        this.carousel.addEventListener('mousemove', this.handleMove.bind(this));
+        this.carousel.addEventListener('mouseup', this.handleEnd.bind(this));
+        this.carousel.addEventListener('mouseleave', this.handleEnd.bind(this));
+
+        // Touch events for mobile
+        this.carousel.addEventListener('touchstart', this.handleStart.bind(this), { passive: false });
+        this.carousel.addEventListener('touchmove', this.handleMove.bind(this), { passive: false });
+        this.carousel.addEventListener('touchend', this.handleEnd.bind(this));
+      }
+
+      handleStart(e) {
+        this.isDragging = true;
+        this.startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+        this.initialTransform = this.getCurrentTransform();
+        this.carousel.style.transition = 'none';
+        this.carousel.style.cursor = 'grabbing';
+      }
+
+      handleMove(e) {
+        if (!this.isDragging) return;
+        
+        e.preventDefault();
+        this.currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+        const diffX = this.currentX - this.startX;
+        const newTransform = this.initialTransform + diffX;
+        
+        this.carousel.style.transform = `translateX(${newTransform}px)`;
+      }
+
+      handleEnd() {
+        if (!this.isDragging) return;
+        
+        this.isDragging = false;
+        this.carousel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        this.carousel.style.cursor = 'grab';
+        
+        const diffX = this.currentX - this.startX;
+        const threshold = 50;
+        
+        if (Math.abs(diffX) > threshold) {
+          if (diffX > 0) {
+            this.previous();
+          } else {
+            this.next();
+          }
+        } else {
+          this.updatePosition();
+        }
+      }
+
+      previous() {
+        this.currentIndex--;
+        this.updatePosition();
+        this.checkLoop();
+      }
+
+      next() {
+        this.currentIndex++;
+        this.updatePosition();
+        this.checkLoop();
+      }
+
+      checkLoop() {
+        // If we're at the end of the first set, jump to the end of the second set
+        if (this.currentIndex < 0) {
+          this.currentIndex = this.totalCards * 2 - 1;
+          this.carousel.style.transition = 'none';
+          this.updatePosition();
+          setTimeout(() => {
+            this.carousel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+          }, 50);
+        }
+        // If we're at the end of the third set, jump to the beginning of the second set
+        else if (this.currentIndex >= this.totalCards * 2) {
+          this.currentIndex = this.totalCards;
+          this.carousel.style.transition = 'none';
+          this.updatePosition();
+          setTimeout(() => {
+            this.carousel.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+          }, 50);
+        }
+      }
+
+      updatePosition() {
+        const cardWidth = this.getCardWidth();
+        const translateX = -this.currentIndex * cardWidth;
+        this.carousel.style.transform = `translateX(${translateX}px)`;
+        this.updateButtons();
+      }
+
+      getCurrentTransform() {
+        const transform = this.carousel.style.transform;
+        const match = transform.match(/translateX\(([^)]+)px\)/);
+        return match ? parseFloat(match[1]) : 0;
+      }
+
+      updateButtons() {
+        // Always show buttons for infinite loop
+        this.prevBtn.style.display = 'flex';
+        this.nextBtn.style.display = 'flex';
+      }
+
+      getCardWidth() {
+        if (window.innerWidth >= 992) return 296; // 280px + 16px gap for desktop
+        if (window.innerWidth >= 768) return 316; // 300px + 16px gap
+        return 256; // 240px + 16px gap for mobile
+      }
+
+      showMessage(text) {
+        this.carousel.innerHTML = `<div style="text-align: center; padding: 2rem; color: #666;">${text}</div>`;
+      }
+    }
+
+    // Ordinance Loader Class
+    class OrdinanceLoader {
+      constructor() {
+        this.container = document.getElementById('ordinances-container');
+        this.init();
+      }
+
+      async init() {
+        await this.loadOrdinances();
+      }
+
+      async loadOrdinances() {
+        try {
+          const response = await fetch('./php_folder/manageOrdinances.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.ordinances?.length > 0) {
+            this.displayOrdinances(data.ordinances.slice(0, 6)); // Limit to 6 cards
+          } else {
+            this.showMessage('No ordinances available');
+          }
+        } catch (error) {
+          console.error('Error loading ordinances:', error);
+          this.showMessage('Error loading ordinances');
+        }
+      }
+
+      displayOrdinances(ordinances) {
+        this.container.innerHTML = '';
+        
+        ordinances.forEach((ordinance, index) => {
+          const col = document.createElement('div');
+          col.className = 'col';
+          
+          const card = document.createElement('ordinance-card');
+          card.setAttribute('id', `ord-${ordinance.ordinanceId}`);
+          card.setAttribute('ref', ordinance.ordinanceNo);
+          card.setAttribute('title', ordinance.description);
+          card.setAttribute('date', ordinance.dateEnacted);
+          
+          col.appendChild(card);
+          this.container.appendChild(col);
+        });
+      }
+
+      showMessage(text) {
+        this.container.innerHTML = `
+          <div class="col-12 text-center">
+            <div class="alert alert-info" role="alert">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // News Update Loader Class
+    class NewsUpdateLoader {
+      constructor() {
+        this.container = document.getElementById('news-updates-container');
+        this.init();
+      }
+
+      async init() {
+        await this.loadNewsUpdates();
+      }
+
+      async loadNewsUpdates() {
+        try {
+          const response = await fetch('./php_folder/manageNewsUpdates.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.newsupdates?.length > 0) {
+            this.displayNewsUpdates(data.newsupdates.slice(0, 8)); // Limit to 8 cards
+          } else {
+            this.showMessage('No news updates available');
+          }
+        } catch (error) {
+          console.error('Error loading news updates:', error);
+          this.showMessage('Error loading news updates');
+        }
+      }
+
+      displayNewsUpdates(newsupdates) {
+        this.container.innerHTML = '';
+        
+        newsupdates.forEach((newsupdate, index) => {
+          const col = document.createElement('div');
+          col.className = 'col';
+          
+          const card = document.createElement('newsupdate-card');
+          card.setAttribute('id', `news-${newsupdate.newsupdateId}`);
+          card.setAttribute('img', newsupdate.newsupdatePicPath || '/imgs/CSWDO.png');
+          card.setAttribute('title', newsupdate.newsupdateTitle);
+          card.setAttribute('date', this.formatDate(newsupdate.uploadDate));
+          
+          col.appendChild(card);
+          this.container.appendChild(col);
+        });
+      }
+
+      formatDate(dateString) {
+        // Convert YYYY-MM-DD to a more readable format
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+
+      showMessage(text) {
+        this.container.innerHTML = `
+          <div class="col-12 text-center">
+            <div class="alert alert-info" role="alert">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Featured Stories Loader Class
+    class FeaturedStoriesLoader {
+      constructor() {
+        this.container = document.getElementById('featured-stories-container');
+        this.init();
+      }
+
+      async init() {
+        await this.loadFeaturedStories();
+      }
+
+      async loadFeaturedStories() {
+        try {
+          const response = await fetch('./php_folder/manageFeaturedStories.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.featuredstories?.length > 0) {
+            // Sort by upload date (most recent first) and limit to 8 cards
+            const sortedStories = data.featuredstories
+              .sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))
+              .slice(0, 8);
+            this.displayFeaturedStories(sortedStories);
+          } else {
+            this.showMessage('No featured stories available');
+          }
+        } catch (error) {
+          console.error('Error loading featured stories:', error);
+          this.showMessage('Error loading featured stories');
+        }
+      }
+
+      displayFeaturedStories(featuredstories) {
+        this.container.innerHTML = '';
+        
+        featuredstories.forEach((story, index) => {
+          const col = document.createElement('div');
+          col.className = 'col';
+          
+          const card = document.createElement('feature-card');
+          card.setAttribute('id', `featured-${story.featuredstoriesId}`);
+          card.setAttribute('img', story.featuredstoriesPicPath || '/imgs/CSWDO.png');
+          card.setAttribute('title', story.featuredstoriesTitle);
+          card.setAttribute('desc', this.formatDate(story.uploadDate));
+          
+          col.appendChild(card);
+          this.container.appendChild(col);
+        });
+      }
+
+      formatDate(dateString) {
+        // Convert YYYY-MM-DD to a more readable format
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+
+      showMessage(text) {
+        this.container.innerHTML = `
+          <div class="col-12 text-center">
+            <div class="alert alert-info" role="alert">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Advisory Loader Class
+    class AdvisoryLoader {
+      constructor() {
+        this.container = document.getElementById('advisories-container');
+        this.loadMoreBtn = document.getElementById('load-more-advisories');
+        this.currentPage = 0;
+        this.allAdvisories = [];
+        this.isMobile = window.innerWidth < 768;
+        this.init();
+      }
+
+      async init() {
+        await this.loadAdvisories();
+        this.setupLoadMore();
+        this.setupResizeListener();
+      }
+
+      getItemsPerPage() {
+        return this.isMobile ? 3 : 20;
+      }
+
+      setupResizeListener() {
+        window.addEventListener('resize', () => {
+          const wasMobile = this.isMobile;
+          this.isMobile = window.innerWidth < 768;
+          
+          // If viewport changed from mobile to desktop or vice versa, refresh display
+          if (wasMobile !== this.isMobile) {
+            this.currentPage = 0;
+            this.displayAdvisories();
+          }
+        });
+      }
+
+      async loadAdvisories() {
+        try {
+          const response = await fetch('./php_folder/manageAdvisories.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.advisories?.length > 0) {
+            // Sort by upload date (most recent first)
+            this.allAdvisories = data.advisories.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            this.displayAdvisories();
+          } else {
+            this.showMessage('No advisories available');
+          }
+        } catch (error) {
+          console.error('Error loading advisories:', error);
+          this.showMessage('Error loading advisories');
+        }
+      }
+
+      displayAdvisories() {
+        const itemsPerPage = this.getItemsPerPage();
+        const startIndex = this.currentPage * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const advisoriesToShow = this.allAdvisories.slice(startIndex, endIndex);
+
+        if (this.currentPage === 0) {
+          this.container.innerHTML = '';
+          
+          // Enable mobile scroll immediately on mobile view
+          if (this.isMobile) {
+            this.enableMobileScroll();
+          }
+        }
+
+        advisoriesToShow.forEach((advisory, index) => {
+          const card = document.createElement('advisory-card');
+          card.setAttribute('id', `advisory-${advisory.advisoryId}`);
+          card.setAttribute('title', advisory.advisoryTitle);
+          card.setAttribute('desc', advisory.advisoryDescription);
+          card.setAttribute('date', this.formatDate(advisory.uploadDate));
+          
+          this.container.appendChild(card);
+        });
+
+        // Show/hide Load More button based on viewport and remaining items
+        const hasMore = endIndex < this.allAdvisories.length;
+        this.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+      }
+
+      setupLoadMore() {
+        this.loadMoreBtn.onclick = () => {
+          this.currentPage++;
+          this.displayAdvisories();
+        };
+      }
+
+      enableMobileScroll() {
+        // Add max-height and overflow-y scroll to container on mobile
+        this.container.style.maxHeight = '400px';
+        this.container.style.overflowY = 'auto';
+        this.container.style.paddingRight = '8px'; // Add some padding for scrollbar
+        
+        // Add custom scrollbar styling
+        this.container.style.scrollbarWidth = 'thin';
+        this.container.style.scrollbarColor = '#6B3E3E #f1f1f1';
+            
+        // Webkit scrollbar styling for better mobile experience
+        const style = document.createElement('style');
+        style.textContent = `
+          #advisories-container::-webkit-scrollbar {
+            width: 6px;
+          }
+          #advisories-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+          }
+          #advisories-container::-webkit-scrollbar-thumb {
+            background: #6B3E3E;
+            border-radius: 3px;
+          }
+          #advisories-container::-webkit-scrollbar-thumb:hover {
+            background: #5a3333;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      formatDate(dateString) {
+        // Convert YYYY-MM-DD to a more readable format
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+
+      showMessage(text) {
+        this.container.innerHTML = `
+          <div class="text-center">
+            <div class="alert alert-info" role="alert">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      new ServiceCarousel();
+      new OrdinanceLoader();
+      new NewsUpdateLoader();
+      new FeaturedStoriesLoader();
+      new AdvisoryLoader();
+    });
+  </script>
+</body>
+</html>

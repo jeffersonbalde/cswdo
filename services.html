@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="TRiG3N" />
+    <meta
+      name="description"
+      content="The official Web-Application of City Social Welfare and Development Office Pagadian City"
+    />
+<title>CSWDO-Pagadian | Services</title>
+
+    <!-- bootstrap import -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+      crossorigin="anonymous"
+    />
+
+ <style>
+    /* Override Bootstrap default body margins/padding to ensure footer extends to bottom */
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    html {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Container layout modifications */
+    .container {
+      max-width: calc(100vw - 40px) !important;
+      margin: 0 20px !important;
+      padding: 0 !important;
+    }
+    
+    /* Section cards - plain white with no borders */
+    .section-card {
+      padding: 1.5rem;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      background-color: white;
+      margin-bottom: 1.5rem;
+      /* Space between sections on mobile */
+    }
+    @media (min-width: 768px) {
+      .section-card {
+        margin-bottom: 0;
+        /* Remove margin between sections on desktop */
+      }
+    }
+    
+    /* H1 headings styling */
+    .mt-5 h1 {
+      text-align: center;
+      text-transform: capitalize;
+    }
+    
+    /* Button styling */
+    .btn {
+      color: black !important;
+      background-color: orange !important;
+      border: 1px solid black !important;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 0 auto;
+      padding: 12px 24px;
+      font-size: 16px;
+      min-width: 150px;
+    }
+    
+    .btn:hover,
+    .btn:focus,
+    .btn:active {
+      color: white !important;
+      background-color: #A8D5BA !important;
+      border: 1px solid white !important;
+    }
+    
+    /* Special styling for small buttons like Load More */
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 14px;
+      min-width: 120px;
+    }
+
+    .learn-more-btn {
+          color: black !important;
+          background-color: orange !important;
+          border: 1px solid black !important;
+          transition: all 0.3s ease;
+          display: block;
+          margin: 0 auto;
+          padding: 12px 24px;
+          font-size: 16px;
+          min-width: 150px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: 500;
+        }
+
+        .learn-more-btn:hover,
+        .learn-more-btn:focus,
+        .learn-more-btn:active {
+          color: white !important;
+          background-color: #A8D5BA !important;
+          border: 1px solid white !important;
+          transform: translateY(-1px);
+        }
+
+  </style>
+
+    <!-- imports of components -->
+    <script type="module" src="./components/register-components.js"></script>
+</head>
+<body>
+
+  
+    <resident-header></resident-header>
+
+
+  
+
+
+<main>
+  <feedback-widget></feedback-widget>
+  <chat-widget> </chat-widget>
+  <visual-picture img="/imgs/home_bckgrnd.png"></visual-picture>
+
+
+
+  <div class="container">
+    <div class="row mt-4">
+      <!-- Advisory Section (Left on Desktop, Bottom on Mobile) -->
+      <div class="col-12 col-md-4 order-md-last">
+        <div class="section-card">
+          <h2>Advisories</h2>
+          <div id="advisories-container">
+            <!-- Advisory cards will be loaded here -->
+            <div class="text-center">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading advisories...</span>
+              </div>
+            </div>
+          </div>
+          <button id="load-more-advisories" class="btn btn-outline-primary btn-sm mt-3" style="display: none;">
+            Load More
+          </button>
+        </div>
+      </div>
+
+
+      <div class="col-12 col-md-8 order-md-first">
+        <div class="section-card">
+          <div class="mt-5">
+            <h1 id="chidservices">Child and Youth Welfare</h1>
+            <div class="chidservices-container">
+              <services-display department="Child and Youth Welfare"></services-display>
+              <button id="learn-more-btn" class="learn-more-btn" style="display: none;">
+                Learn More
+              </button>
+            </div>
+            
+          </div>
+          <div class="mt-5">
+            <h1 id="famservices">Family and Community Based Welfare</h1>
+            <div class="famservices-container">
+              <services-display department="Family and Community Based Welfare"></services-display>
+              <button id="learn-more-fam-btn" class="learn-more-btn" style="display: none;">
+                Learn More
+              </button>
+            </div>
+            
+          </div>
+          <div class="mt-5">
+            <h1 id="news-updates">Emergency and Disaster Welfare</h1>
+            <div class="emergency-container">
+              <services-display department="Emergency and Disaster Welfare"></services-display>
+              <button id="learn-more-emergency-btn" class="learn-more-btn" style="display: none;">
+                Learn More
+              </button>
+            </div>
+          </div>
+          <div class="mt-5">
+            <h1>Sectoral Welfare </h1>
+            <div class="sectoral-container">
+              <services-display department="Sectoral Welfare"></services-display>
+              <button id="learn-more-sectoral-btn" class="learn-more-btn" style="display: none;">
+                Learn More
+              </button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+    <resident-footer></resident-footer>
+
+  <!-- Bootstrap JS (optional, for certain components like dropdowns, modals) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  
+  <script>
+    // Advisory Loader Class
+    class AdvisoryLoader {
+      constructor() {
+        this.container = document.getElementById('advisories-container');
+        this.loadMoreBtn = document.getElementById('load-more-advisories');
+        this.currentPage = 0;
+        this.allAdvisories = [];
+        this.isMobile = window.innerWidth < 768;
+        this.init();
+      }
+
+      async init() {
+        await this.loadAdvisories();
+        this.setupLoadMore();
+        this.setupResizeListener();
+      }
+
+      getItemsPerPage() {
+        return this.isMobile ? 3 : 20;
+      }
+
+      setupResizeListener() {
+        window.addEventListener('resize', () => {
+          const wasMobile = this.isMobile;
+          this.isMobile = window.innerWidth < 768;
+          
+          // If viewport changed from mobile to desktop or vice versa, refresh display
+          if (wasMobile !== this.isMobile) {
+            this.currentPage = 0;
+            this.displayAdvisories();
+          }
+        });
+      }
+
+      async loadAdvisories() {
+        try {
+          const response = await fetch('./php_folder/manageAdvisories.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=fetchdata'
+          });
+
+          const data = await response.json();
+          
+          if (data.success && data.advisories?.length > 0) {
+            // Sort by upload date (most recent first)
+            this.allAdvisories = data.advisories.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            this.displayAdvisories();
+          } else {
+            this.showMessage('No advisories available');
+          }
+        } catch (error) {
+          console.error('Error loading advisories:', error);
+          this.showMessage('Error loading advisories');
+        }
+      }
+
+      displayAdvisories() {
+        const itemsPerPage = this.getItemsPerPage();
+        const startIndex = this.currentPage * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const advisoriesToShow = this.allAdvisories.slice(startIndex, endIndex);
+
+        if (this.currentPage === 0) {
+          this.container.innerHTML = '';
+          
+          // Enable mobile scroll immediately on mobile view
+          if (this.isMobile) {
+            this.enableMobileScroll();
+          }
+        }
+
+        advisoriesToShow.forEach((advisory, index) => {
+          const card = document.createElement('advisory-card');
+          card.setAttribute('id', `advisory-${advisory.advisoryId}`);
+          card.setAttribute('title', advisory.advisoryTitle);
+          card.setAttribute('desc', advisory.advisoryDescription);
+          card.setAttribute('date', this.formatDate(advisory.uploadDate));
+          
+          this.container.appendChild(card);
+        });
+
+        // Show/hide Load More button based on viewport and remaining items
+        const hasMore = endIndex < this.allAdvisories.length;
+        this.loadMoreBtn.style.display = hasMore ? 'block' : 'none';
+      }
+
+      setupLoadMore() {
+        this.loadMoreBtn.onclick = () => {
+          this.currentPage++;
+          this.displayAdvisories();
+        };
+      }
+
+      enableMobileScroll() {
+        // Add max-height and overflow-y scroll to container on mobile
+        this.container.style.maxHeight = '400px';
+        this.container.style.overflowY = 'auto';
+        this.container.style.paddingRight = '8px'; // Add some padding for scrollbar
+        
+        // Add custom scrollbar styling
+        this.container.style.scrollbarWidth = 'thin';
+        this.container.style.scrollbarColor = '#6B3E3E #f1f1f1';
+        
+        // Webkit scrollbar styling for better mobile experience
+        const style = document.createElement('style');
+        style.textContent = `
+          #advisories-container::-webkit-scrollbar {
+            width: 6px;
+          }
+          #advisories-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+          }
+          #advisories-container::-webkit-scrollbar-thumb {
+            background: #6B3E3E;
+            border-radius: 3px;
+          }
+          #advisories-container::-webkit-scrollbar-thumb:hover {
+            background: #5a3333;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      formatDate(dateString) {
+        // Convert YYYY-MM-DD to a more readable format
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+      }
+
+      showMessage(text) {
+        this.container.innerHTML = `
+          <div class="text-center">
+            <div class="alert alert-info" role="alert">
+              ${text}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Services Load More Functionality
+    class ServicesLoadMore {
+      constructor() {
+        this.buttons = {
+          'chidservices': document.getElementById('learn-more-btn'),
+          'famservices': document.getElementById('learn-more-fam-btn'),
+          'emergency': document.getElementById('learn-more-emergency-btn'),
+          'sectoral': document.getElementById('learn-more-sectoral-btn')
+        };
+        this.init();
+      }
+
+      init() {
+        // Set up event listeners for all Learn More buttons
+        Object.keys(this.buttons).forEach(section => {
+          const button = this.buttons[section];
+          if (button) {
+            button.addEventListener('click', () => {
+              this.loadMoreServices(section);
+            });
+          }
+        });
+
+        // Check for services-display components and set up load more functionality
+        this.setupServicesDisplayComponents();
+      }
+
+      setupServicesDisplayComponents() {
+        // Wait for services-display components to load
+        setTimeout(() => {
+          const servicesDisplays = document.querySelectorAll('services-display');
+          servicesDisplays.forEach((display, index) => {
+            this.setupComponentLoadMore(display, index);
+          });
+        }, 1000);
+      }
+
+      setupComponentLoadMore(component, index) {
+        // Get the shadow root of the services-display component
+        const shadowRoot = component.shadowRoot;
+        if (!shadowRoot) return;
+
+        // Create a Learn More button in the shadow root if it doesn't exist
+        let learnMoreBtn = shadowRoot.querySelector('#learn-more-btn');
+        if (!learnMoreBtn) {
+          learnMoreBtn = document.createElement('button');
+          learnMoreBtn.id = 'learn-more-btn';
+          learnMoreBtn.className = 'learn-more-btn';
+          learnMoreBtn.textContent = 'Learn More';
+          learnMoreBtn.style.display = 'none';
+          
+          // Add the button to the services-display component
+          const servicesDisplay = shadowRoot.querySelector('.services-display');
+          if (servicesDisplay) {
+            servicesDisplay.appendChild(learnMoreBtn);
+          }
+        }
+
+        // Set up the load more functionality
+        learnMoreBtn.addEventListener('click', () => {
+          this.loadMoreServicesInComponent(component);
+        });
+
+        // Check if there are more services to show
+        this.checkAndShowButton(component);
+      }
+
+      loadMoreServicesInComponent(component) {
+        // Get the services-display component's internal data
+        const shadowRoot = component.shadowRoot;
+        if (!shadowRoot) return;
+
+        // Trigger the component's internal load more functionality
+        if (component.displayedCount) {
+          component.displayedCount += 5;
+          component.renderServices();
+          this.checkAndShowButton(component);
+        }
+      }
+
+      checkAndShowButton(component) {
+        const shadowRoot = component.shadowRoot;
+        if (!shadowRoot) return;
+
+        const learnMoreBtn = shadowRoot.querySelector('#learn-more-btn');
+        if (!learnMoreBtn) return;
+
+        // Check if there are more services to display
+        if (component.services && component.displayedCount >= component.services.length) {
+          learnMoreBtn.style.display = 'none';
+        } else {
+          learnMoreBtn.style.display = 'block';
+        }
+      }
+
+      loadMoreServices(section) {
+        // Find the corresponding services-display component
+        const sectionMap = {
+          'chidservices': 'Child and Youth Welfare',
+          'famservices': 'Family and Community Based Welfare',
+          'emergency': 'Emergency and Disaster Welfare',
+          'sectoral': 'Sectoral Welfare'
+        };
+
+        const department = sectionMap[section];
+        if (!department) return;
+
+        const component = document.querySelector(`services-display[department="${department}"]`);
+        if (component) {
+          this.loadMoreServicesInComponent(component);
+        }
+      }
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      new AdvisoryLoader();
+      new ServicesLoadMore();
+    });
+  </script>
+</body>
+</html>
