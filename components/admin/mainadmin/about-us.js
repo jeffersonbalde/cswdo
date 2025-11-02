@@ -376,7 +376,7 @@ class AboutUs extends HTMLElement {
           <div id="aboutHeaderContent" class="about-header-content">
             <h1 id="aboutTitle" class="about-title">Featured Stories</h1>
             <p id="aboutDescription" class="about-description">
-              The City Social Welfare and Development Office in Pagadian City is mandated to provide social protective and social development services to poor, vulnerable and disadvantaged individuals, families, groups and communities.
+              The City i LOVE JEFF Welfare and Development Office in Pagadian City is mandated to provide social protective and social development services to poor, vulnerable and disadvantaged individuals, families, groups and communities.
             </p>
           </div>
         </div>
